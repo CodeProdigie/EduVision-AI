@@ -1,9 +1,12 @@
 import mongoose from 'mongoose';
 
 export const connectDatabase = async () => {
-  if (!process.env.MONGODB_URI) {
-    throw new Error('MONGODB_URI is not configured');
-  }
+  const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/papervideo';
 
-  await mongoose.connect(process.env.MONGODB_URI);
+  try {
+    await mongoose.connect(uri);
+    console.log('MongoDB connected');
+  } catch (error) {
+    console.error('MongoDB connection failed, running without database:', error.message);
+  }
 };
