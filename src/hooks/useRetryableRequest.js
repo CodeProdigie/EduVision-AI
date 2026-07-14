@@ -23,8 +23,16 @@ export const useRetryableRequest = (requestFn) => {
   }, [requestFn]);
 
   const retry = useCallback(async (...args) => {
+    setError(null);
     return execute(...args);
   }, [execute]);
 
-  return { data, error, loading, attempt, execute, retry };
+  const reset = useCallback(() => {
+    setData(null);
+    setError(null);
+    setLoading(false);
+    setAttempt(0);
+  }, []);
+
+  return { data, error, loading, attempt, execute, retry, reset };
 };

@@ -1,11 +1,16 @@
 import env from '../config/env';
+import { useAuthStore } from '../store/authStore';
 
 const request = async (path, options = {}) => {
+  const token = useAuthStore.getState().token;
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+
   const response = await fetch(`${env.apiUrl}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
+    headers,
     ...options,
   });
 
